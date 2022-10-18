@@ -4,6 +4,6 @@ Projeto final da disciplina interface hardware-software
 ## Membros
 
  - egb2 - Enzo Gurgel Bissoli
- - ellc - Ednels
+ - ellc - Ednelson Luan Cavalcanti
  - haac - Hugo Alves Cardoso
- - jam5 - Júlia Alves  
+ - jam5 - Júlia Alves Machado
