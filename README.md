@@ -7,3 +7,4 @@ Projeto final da disciplina interface hardware-software
  - ellc - Ednelson Luan Cavalcanti
  - haac - Hugo Alves Cardoso
  - jam5 - Júlia Alves Machado
+ - vlv2 - Vinicius Lima Ventura
