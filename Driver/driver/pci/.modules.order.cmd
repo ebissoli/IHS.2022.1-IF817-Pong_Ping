@@ -1,0 +1,1 @@
+cmd_/home/CIN/egb2/git/ihs-project-layout/driver/pci/modules.order := {   echo /home/CIN/egb2/git/ihs-project-layout/driver/pci/de2i-150.ko; :; } | awk '!x[$$0]++' - > /home/CIN/egb2/git/ihs-project-layout/driver/pci/modules.order

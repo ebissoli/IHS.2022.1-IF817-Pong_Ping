@@ -1,0 +1,1 @@
+cmd_/home/CIN/egb2/git/ihs-project-layout/driver/pci/Module.symvers := sed 's/\.ko$$/\.o/' /home/CIN/egb2/git/ihs-project-layout/driver/pci/modules.order | scripts/mod/modpost -m -a  -o /home/CIN/egb2/git/ihs-project-layout/driver/pci/Module.symvers -e -i Module.symvers   -T -

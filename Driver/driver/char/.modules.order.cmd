@@ -1,0 +1,1 @@
+cmd_/home/CIN/egb2/git/ihs-project-layout/driver/char/modules.order := {   echo /home/CIN/egb2/git/ihs-project-layout/driver/char/dummy.ko; :; } | awk '!x[$$0]++' - > /home/CIN/egb2/git/ihs-project-layout/driver/char/modules.order

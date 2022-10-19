@@ -1,0 +1,1 @@
+cmd_/home/CIN/egb2/git/ihs-project-layout/driver/pci/de2i-150.mod := { echo  /home/CIN/egb2/git/ihs-project-layout/driver/pci/de2i-150.o;  echo; } > /home/CIN/egb2/git/ihs-project-layout/driver/pci/de2i-150.mod
