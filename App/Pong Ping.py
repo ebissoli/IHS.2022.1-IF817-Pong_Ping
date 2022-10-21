@@ -1,5 +1,12 @@
 import pygame
+import os, sys
+from fcntl import ioctl
+import time
 from operator import xor
+
+'''
+    Constants
+'''
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -37,8 +44,26 @@ ball_width = 8
 ball_x_vel = -10
 ball_y_vel = 0
 
+num_buttons = 4
+
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
+RD_BUTTON = 29430 
+
+def button_pressed(button_set):
+    """
+    Return an array of pressed buttons, 1 if pressed else 0 
+    """
+    return [1 if button_set & (1 << actual) else 0 for actual in range(num_buttons)]
+
+def read_button_set():
+    """
+    Return array containing button set state
+    """
+    ioctl(fd, RD_PBUTTONS)
+    read = os.read(fd, 4); # read 4 bytes and store in red var
+    read = int.from_bytes(read, 'little')
+    return read
 
 def draw_objects():
     pygame.draw.rect(
@@ -109,37 +134,44 @@ def apply_ball_movement():
     ball_x_pos += ball_x_vel
     ball_y_pos += ball_y_vel
 
-
-# Main loop
-pygame.display.set_caption("Pong Ping")
-screen.fill(BLACK)
-pygame.display.flip()
-
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                running = False
-            if event.key == pygame.K_w:
-                p1_up, p1_down = True, False
-            elif event.key == pygame.K_s:
-                p1_up, p1_down = False, True
-            if event.key == pygame.K_UP:
-                p2_up, p2_down = True, False
-            elif event.key == pygame.K_DOWN:
-                p2_up, p2_down = False, True
-        elif event.type == pygame.KEYUP:
-            if xor(event.key == pygame.K_w, event.key == pygame.K_s):
-                p1_up, p1_down = False, False
-            if xor(event.key == pygame.K_UP, event.key == pygame.K_DOWN):
-                p2_up, p2_down = False, False
-
+def main_loop():
+    pygame.display.set_caption("Pong Ping")
     screen.fill(BLACK)
-    apply_player_movement()
-    apply_ball_movement()
-    draw_objects()
     pygame.display.flip()
-    pygame.time.wait(delay)
+    fd =  os.open(sys.argv[1],os.O_RDWR)
+    running = True
+    while running:
+        set_buttons = read_button_set()
+        pressed_buttons = button_pressed(set_buttons)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+            if pressed_buttons[0]: # Player1 buttons, Only read the first valid position, ignore the rest of pressed buttons
+                    p1_up, p1_down = True, False
+            elif pressed_buttons[1]:
+                    p1_up, p1_down = False, True
+            if pressed_buttons[2]: # Player2 buttons
+                    p2_up, p2_down = True, False
+            elif pressed_buttons[3]:
+                    p2_up, p2_down = False, True
+            if event.type == pygame.KEYUP:
+                if xor(event.key == pygame.K_w, event.key == pygame.K_s):
+                    p1_up, p1_down = False, False
+                if xor(event.key == pygame.K_UP, event.key == pygame.K_DOWN):
+                    p2_up, p2_down = False, False
+
+        screen.fill(BLACK)
+        apply_player_movement()
+        apply_ball_movement()
+        draw_objects()
+        pygame.display.flip()
+        pygame.time.wait(delay)
+
+if __name__ == '__main__':
+   fd = os.open(sys.argv[1], os.O_RDWR)
+   main_loop()
+   os.close(fd)
+   pygame.quit()
